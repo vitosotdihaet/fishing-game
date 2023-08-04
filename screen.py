@@ -15,7 +15,7 @@ class ScreenType(Enum):
 
 # A state of the game on concrete screen with all the info
 class Screen:
-    def __init__(self, screen_type: ScreenType, scr: Scr, rows: int, cols: int, rod: Rod, fish: list[Fish] = []):
+    def __init__(self, screen_type: ScreenType, scr: Scr, rows: int, cols: int, rod: Rod | None, fish: list[Fish] = []):
         self.screen_type = screen_type
         self.scr = scr
 
@@ -41,4 +41,5 @@ class Screen:
         for f in self.fish:
             f.addstr(self.scr.curses_scr)
 
-        self.rod.addstr(self.scr.curses_scr)
+        if self.rod != None:
+            self.rod.addstr(self.scr.curses_scr)

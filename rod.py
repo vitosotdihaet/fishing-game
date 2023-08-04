@@ -2,7 +2,6 @@ from fish import Fish
 
 from curses import A_BOLD
 
-import art.rods as rods
 
 class Rod:
     def __init__(self, power: int, img: list[str]):
