@@ -1,59 +1,34 @@
-from fish import Fish, random_fish
-from fish_parts import DEFAULT_TAIL, DEFAULT_LOWER_BODY, DEFAULT_UPPER_BODY, DEFAULT_HEAD
+from screen import Screen, ScreenType
 
-import curses
+from fish import random_fish
 
-import datetime
-import time
+from manage_scr import Scr, curses
 
 import traceback
+
+from app import App
+
 
 APP_NAME = 'Fishing game'
 QUIT_SPLASH = 'Press q to close this screen'
 
 
+STDSCR = None
+rows, cols = 0, 0
 try:
-	# -- Initialize --
-	stdscr = curses.initscr()
-	curses.noecho()
-	curses.cbreak()
-	stdscr.keypad(1)
-	stdscr.nodelay(1)
-
-	FISH = random_fish(stdscr, 5)
-
-	rows, cols = stdscr.getmaxyx()
-
-	stdscr.border(0)
-	stdscr.addstr(0, int((cols - len(APP_NAME))/2), f' {APP_NAME} ', curses.A_BOLD)
-	stdscr.addstr(1, int((cols - len(QUIT_SPLASH))/2), QUIT_SPLASH, curses.A_NORMAL)
-	
-	while True:
-		rows, cols = stdscr.getmaxyx()
-
-		for f in FISH:
-			f.update(stdscr)
-			f.remstr(stdscr)
-
-		for f in FISH:
-			f.addstr(stdscr)
-
-		stdscr.refresh()
-		time.sleep(0.1)
-
-		ch = stdscr.getch()
-		if ch == ord('q'):
-			break
-
+    STDSCR = Scr(curses.initscr())
+    rows, cols = STDSCR.curses_scr.getmaxyx()
 except:
-	stdscr.keypad(0)
-	curses.echo()
-	curses.nocbreak()
-	curses.endwin()
-	traceback.print_exc()
-	exit(1)
+    curses.endwin()
+    traceback.print_exc()
+    exit(1)
 
-stdscr.keypad(0)
-curses.echo()
-curses.nocbreak()
-curses.endwin()
+
+SCREENS = [
+    Screen(ScreenType.FISHING, STDSCR, rows, cols, random_fish(rows, cols, 5)),
+    Screen(ScreenType.BUCKET, STDSCR, rows, cols, random_fish(rows, cols, 1))
+]
+
+if __name__ == '__main__':
+    app = App(STDSCR, SCREENS)
+    app.run()
