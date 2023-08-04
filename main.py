@@ -1,8 +1,11 @@
 from screen import Screen, ScreenType
+from rod import Rod
+
+import art.rods
 
 from fish import random_fish
 
-from manage_scr import Scr, curses
+from scr import Scr, curses
 
 import traceback
 
@@ -24,11 +27,15 @@ except:
     exit(1)
 
 
+RODS = [
+    Rod(1, art.rods.DEFAULT)
+]
+
 SCREENS = [
-    Screen(ScreenType.FISHING, STDSCR, rows, cols, random_fish(rows, cols, 5)),
-    Screen(ScreenType.BUCKET, STDSCR, rows, cols, random_fish(rows, cols, 1))
+    Screen(ScreenType.FISHING, STDSCR, rows, cols, RODS[0], random_fish(rows, cols, 5)),
+    Screen(ScreenType.BUCKET, STDSCR, rows, cols, RODS[0], random_fish(rows, cols, 1))
 ]
 
 if __name__ == '__main__':
-    app = App(STDSCR, SCREENS)
+    app = App(STDSCR, SCREENS, RODS)
     app.run()

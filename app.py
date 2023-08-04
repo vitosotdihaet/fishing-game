@@ -1,6 +1,7 @@
-from screen import Screen, ScreenType
+from screen import Screen
+from rod import Rod
 
-from manage_scr import Scr, ActionKeys
+from scr import Scr, ActionKeys
 
 import curses
 
@@ -8,7 +9,7 @@ import time
 
 
 class App:
-    def __init__(self, scr: Scr, screens: list[Screen]):
+    def __init__(self, scr: Scr, screens: list[Screen], rods: list[Rod]):
         self.scr = scr
 
         self.screens = screens
@@ -16,12 +17,16 @@ class App:
 
         self.active_screen = screens[self.active_screen_ind]
 
+        self.rods = rods
+        self.active_rod_ind = 0
+
+        self.active_rod = rods[self.active_rod_ind]
+
     def update(self):
         for s in self.screens:
             s.update()
-        
-        self.active_screen.draw()
 
+        self.active_screen.draw()
         self.scr.update()
 
     def run(self):
@@ -46,7 +51,7 @@ class App:
 
                     title = self.active_screen.screen_type.value
                     self.scr.curses_scr.addstr(
-                        0, int((self.active_screen.cols - len(title))/2), # center title
+                        0, int((self.active_screen.cols - len(title))/2),
                         f' {title} ',
                         curses.A_BOLD
                     )

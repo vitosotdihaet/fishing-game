@@ -1,8 +1,9 @@
 from enum import Enum
 
-from manage_scr import Scr
+from scr import Scr
 
 from fish import Fish
+from rod import Rod
 
 
 class ScreenType(Enum):
@@ -14,7 +15,7 @@ class ScreenType(Enum):
 
 # A state of the game on concrete screen with all the info
 class Screen:
-    def __init__(self, screen_type: ScreenType, scr: Scr, rows: int, cols: int, fish: list[Fish] = []):
+    def __init__(self, screen_type: ScreenType, scr: Scr, rows: int, cols: int, rod: Rod, fish: list[Fish] = []):
         self.screen_type = screen_type
         self.scr = scr
 
@@ -22,6 +23,7 @@ class Screen:
         self.rows = rows
 
         self.fish = fish
+        self.rod = rod
 
     def update(self):
         match self.screen_type: # handle fish behavior
@@ -38,3 +40,5 @@ class Screen:
 
         for f in self.fish:
             f.addstr(self.scr.curses_scr)
+
+        self.rod.addstr(self.scr.curses_scr)
