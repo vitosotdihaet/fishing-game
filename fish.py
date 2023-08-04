@@ -2,7 +2,7 @@ from curses import A_BOLD
 
 import random
 
-import fish_parts
+import art.fishes as fishes
 from colour import Color
 from custom_math.vec2 import vec2
 
@@ -13,6 +13,7 @@ MAX_Y_SPEED = 1
 class Fish:
 	def __init__(self, size: int, pos: vec2, color: Color, tail: list[str], lower_body: list[str], upper_body: list[str], head: list[str], speed=vec2(0, 0)):
 		self.size = size
+		self.health = size
 		self.color = color
 
 		self.prev_pos = pos
@@ -27,12 +28,31 @@ class Fish:
 		self.img = [tail, lower_body, upper_body, head]
 		self.reversed_img = reverse_fish(self.img)
 
-		self.is_alive = True;
+		self.is_alive = True
+	
+	@staticmethod
+	def random(rows: int, cols: int):
+		size = random.random() * 100
+		color = Color()
+		color.set_rgb([random.random(), random.random(), random.random()])
 
-	def update(self, scr):
+		pos = vec2(random.randint(1, cols - 10), random.randint(1, rows - 10))
+		speed = vec2(random.randint(0, MAX_X_SPEED), random.randint(0, MAX_Y_SPEED))
+
+		fish_index = random.randint(0, len(fishes.TAILS) - 1)
+
+		tail = fishes.TAILS[fish_index]
+		lower_body = fishes.L_BODIES[fish_index]
+		upper_body = fishes.U_BODIES[fish_index]
+		head = fishes.HEADS[fish_index]
+
+		return Fish(int(size), pos, color, tail, lower_body, upper_body, head, speed)
+
+	def update(self, scr, is_on_rod=False):
 		rows, cols = scr.getmaxyx()
 
-		temp_pos = self.pos + self.speed
+		if is_on_rod: temp_pos = self.pos + vec2.random()
+		else: temp_pos = self.pos + self.speed
 
 		if temp_pos.x + 9 >= cols or temp_pos.x <= 0: self.speed.x *= -1
 		if temp_pos.y + 3 >= rows or temp_pos.y <= 0: self.speed.y *= -1
@@ -83,38 +103,28 @@ class Fish:
 					scr.addstr(y + j, x + off_x + k, ' ')
 			off_x += len(self.img[i][0])
 
-	def print(self, facing_right=True):
+	def __str__(self):
 		fish_width = len(self.img)
 		fish_height = len(self.img[0])
 
 		img = self.img
-		if not facing_right: img = self.reversed_img
-		
+		# if not facing_right: img = self.reversed_img
+
+		out = ''
+
 		for i in range(fish_height):
 			for j in range(fish_width):
-				print(img[j][i], end='')
-			print()
+				out += img[j][i]
+			out += '\n'
+
+		return out
 
 
 def random_fish(rows: int, cols: int, count=1):
 	fish = []
 
 	for _ in range(count):
-		size = random.random() * 100
-		color = Color()
-		color.set_rgb([random.random(), random.random(), random.random()])
-
-		pos = vec2(random.randint(1, cols - 2), random.randint(1, rows - 2))
-		speed = vec2(random.randint(0, MAX_X_SPEED), random.randint(0, MAX_Y_SPEED))
-
-		fish_index = random.randint(0, len(fish_parts.TAILS) - 1)
-
-		tail = fish_parts.TAILS[fish_index]
-		lower_body = fish_parts.L_BODIES[fish_index]
-		upper_body = fish_parts.U_BODIES[fish_index]
-		head = fish_parts.HEADS[fish_index]
-
-		fish.append(Fish(int(size), pos, color, tail, lower_body, upper_body, head, speed))
+		fish.append(Fish.random(rows, cols))
 
 	return fish
 
@@ -153,7 +163,7 @@ def reverse_slice(part: list[str]):
 	return new_part
 
 
+
 if __name__ == '__main__':
-	new_fish = Fish(5, vec2(0, 0), Color('blue'), fish_parts.DEFAULT_TAIL, fish_parts.DEFAULT_LOWER_BODY, fish_parts.DEFAULT_UPPER_BODY, fish_parts.DEFAULT_HEAD)
-	new_fish.print()
-	new_fish.print(False)
+	new_fish = Fish(5, vec2(0, 0), Color('blue'), fishes.DEFAULT_TAIL, fishes.DEFAULT_LOWER_BODY, fishes.DEFAULT_UPPER_BODY, fishes.DEFAULT_HEAD)
+	print(new_fish)
