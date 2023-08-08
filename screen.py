@@ -34,12 +34,12 @@ class Screen:
                 for f in self.fish:
                     f.update(self.scr.curses_scr)
 
-    def draw(self):
-        for f in self.fish:
-            f.remstr(self.scr.curses_scr)
+    def draw(self, debug = False):
+        self.scr.curses_scr.clear()
+        self.scr.curses_scr.border(0)
 
         for f in self.fish:
-            f.addstr(self.scr.curses_scr)
+            f.addstr(self.scr.curses_scr, debug = debug)
 
         if self.rod != None:
-            self.rod.addstr(self.scr.curses_scr)
+            self.rod.addstr(self.scr.curses_scr, debug = debug)

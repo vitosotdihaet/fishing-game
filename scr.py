@@ -7,6 +7,8 @@ class ActionKeys(IntEnum):
     EXIT = ord('q')
     NEXT_SCREEN = ord('n')
 
+    THROW_A_ROD = ord(' ')
+
 
 class Scr:
     def __init__(self, curses_scr):
@@ -27,3 +29,7 @@ class Scr:
 
     def update(self):
         self.curses_scr.refresh()
+    
+    def clear(self, border = True):
+        self.curses_scr.clear()
+        if border: self.curses_scr.border(0)

@@ -22,12 +22,6 @@ class App:
 
         self.active_rod = rods[self.active_rod_ind]
 
-    def update(self):
-        for s in self.screens:
-            s.update()
-
-        self.active_screen.draw()
-        self.scr.update()
 
     def run(self):
         title = self.active_screen.screen_type.value
@@ -36,6 +30,8 @@ class App:
             f' {title} ',
             curses.A_BOLD
         )
+
+        throwing = False
 
         while True:
             c = self.scr.curses_scr.getch()
@@ -55,9 +51,24 @@ class App:
                         f' {title} ',
                         curses.A_BOLD
                     )
+                case int(ActionKeys.THROW_A_ROD):
+                    if self.active_screen.rod != None:
+                        throwing = True
+                        self.active_screen.rod.throw_iteration += 1
+
+            if not throwing and self.active_screen.rod != None:
+                self.active_screen.rod.throw_iteration = 0
+            throwing = False
 
             self.update()
             time.sleep(0.1)
+
+    def update(self):
+        for s in self.screens:
+            s.update()
+
+        self.active_screen.draw()
+        self.scr.update()
 
     def next_screen(self):
         self.active_screen_ind = (self.active_screen_ind + 1) % len(self.screens)

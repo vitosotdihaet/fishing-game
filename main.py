@@ -3,7 +3,6 @@ import traceback
 
 from scr import Scr
 
-
 STDSCR = None
 rows, cols = 0, 0
 try:
@@ -19,7 +18,7 @@ import art.rods
 from rod import Rod
 
 RODS = [
-    Rod(1, art.rods.DEFAULT)
+    Rod(1, art.rods.DEFAULT_STICK, art.rods.DEFAULT_BOBBER)
 ]
 
 
@@ -33,7 +32,6 @@ SCREENS = [
 
 
 from app import App
-
 
 if __name__ == '__main__':
     app = App(STDSCR, SCREENS, RODS)

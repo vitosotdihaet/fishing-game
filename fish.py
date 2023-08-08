@@ -29,7 +29,7 @@ class Fish:
 		self.reversed_img = reverse_fish(self.img)
 
 		self.is_alive = True
-	
+
 	@staticmethod
 	def random(rows: int, cols: int):
 		size = random.random() * 100
@@ -83,25 +83,6 @@ class Fish:
 				if (y + j <= 0 or rows <= y + j) or (x + off_x <= 0 or cols <= x + off_x): break
 				scr.addstr(y + j, x + off_x, img[i][j])
 			off_x += len(img[i][0])
-
-	def remstr(self, scr, debug=False):
-		rows, cols = scr.getmaxyx()
-
-		x = self.prev_pos.x
-		y = self.prev_pos.y
-		if debug:
-			scr.addstr(y, x, ' ' * 41)
-			x += 1; y += 1
-
-		off_x = 0
-		fish_width = len(self.img)
-
-		for i in range(fish_width):
-			for j in range(len(self.img[i])):
-				for k in range(len(self.img[i][j])):
-					if (y + j <= 0 or rows <= y + j) or (x + off_x <= 0 or cols <= x + off_x): break
-					scr.addstr(y + j, x + off_x + k, ' ')
-			off_x += len(self.img[i][0])
 
 	def __str__(self):
 		fish_width = len(self.img)
