@@ -12,5 +12,9 @@ class vec2:
         return f'{self.x}, {self.y}'
 
     @staticmethod
+    def empty():
+        return vec2(0, 0)
+
+    @staticmethod
     def random(mini: int = -1, maxi: int = 1):
         return vec2(random.randint(mini, maxi), random.randint(mini, maxi))
