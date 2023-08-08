@@ -16,9 +16,10 @@ except:
 
 import art.rods
 from rod import Rod
+from bobber import Bobber
 
 RODS = [
-    Rod(1, art.rods.DEFAULT_STICK, art.rods.DEFAULT_BOBBER)
+    Rod(1, art.rods.DEFAULT_STICK, Bobber.default())
 ]
 
 

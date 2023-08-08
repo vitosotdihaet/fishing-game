@@ -46,4 +46,4 @@ class Rod:
                 maxx = max(x + j, x)
             maxy = max(y + i, maxy)
 
-        scr.addstr(self.bobber.pos.y, self.bobber.pos.x, self.bobber.img)
+        scr.addstr(maxy + self.bobber.pos.y, maxx + self.bobber.pos.x, self.bobber.img)
