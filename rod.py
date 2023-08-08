@@ -32,18 +32,14 @@ class Rod:
             scr.addstr(y, 1, f'{self.power}', A_BOLD)
             y += 1
 
-        maxy, maxx = y, x
-
-        stick_img = self.stick_img
-        if self.throw_iteration == 0:
-            stick_img = self.stick_img[:-2]
+        last_y, maxx = y, x
 
         for i in range(len(self.stick_img)):
             for j in range(len(self.stick_img[i])):
                 c = self.stick_img[i][j]
                 if c != ' ':
+                    last_y = y + i
                     scr.addstr(y + i, x + j, c)
                 maxx = max(x + j, x)
-            maxy = max(y + i, maxy)
 
-        scr.addstr(maxy + self.bobber.pos.y, maxx + self.bobber.pos.x, self.bobber.img)
+        scr.addstr(last_y + self.bobber.pos.y, maxx + self.bobber.pos.x, self.bobber.img)
