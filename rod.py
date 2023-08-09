@@ -55,7 +55,7 @@ class Rod:
     def update(self):
         if random.random() < BOBBER_MOVE_CHANCE:
             self.bobber.pos += self.bobber.speed
-            self.bobber.speed.y *= -1
+            self.bobber.speed *= -1
 
 
 def draw_string(scr, pos1: vec2, pos2: vec2):
