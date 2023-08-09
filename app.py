@@ -22,14 +22,7 @@ class App:
 
         self.active_rod = rods[self.active_rod_ind]
 
-    def run(self):
-        title = self.active_screen.screen_type.value
-        self.scr.curses_scr.addstr(
-            0, int((self.active_screen.cols - len(title))/2),  # center title
-            f' {title} ',
-            curses.A_BOLD
-        )
-
+    def run(self, debug=False):
         rows, cols = self.scr.curses_scr.getmaxyx()
 
         while True:
@@ -40,39 +33,35 @@ class App:
                     break
                 case int(ActionKeys.NEXT_SCREEN):
                     self.next_screen()
-                    self.scr.curses_scr.erase()
-
-                    self.scr.curses_scr.border(0)
-
-                    title = self.active_screen.screen_type.value
-                    self.scr.curses_scr.addstr(
-                        0, int((self.active_screen.cols - len(title))/2),
-                        f' {title} ',
-                        curses.A_BOLD
-                    )
                 case int(ActionKeys.THROW_A_ROD):
-                    # handle throwing
-                    pass
-                case int(ActionKeys.LEFT):
-                    self.active_rod.bobber.pos.x -= 1
-                case int(ActionKeys.RIGHT):
-                    self.active_rod.bobber.pos.x += 1
-                case int(ActionKeys.UP):
-                    self.active_rod.bobber.pos.y -= 1
-                case int(ActionKeys.DOWN):
-                    self.active_rod.bobber.pos.y += 1
+                    self.active_rod.throw()
+            
+            # Moving bobber
+            if not self.active_rod.thrown:
+                match c:
+                    case int(ActionKeys.LEFT):
+                        self.active_rod.bobber.pos.x -= 1
+                    case int(ActionKeys.RIGHT):
+                        self.active_rod.bobber.pos.x += 1
+                    case int(ActionKeys.UP):
+                        self.active_rod.bobber.pos.y -= 1
+                    case int(ActionKeys.DOWN):
+                        self.active_rod.bobber.pos.y += 1
+            else:
+                self.active_rod.update()
 
             curses.flushinp()
-            self.update()
+            self.update(debug=debug)
             time.sleep(0.1)
 
         self.close()
 
-    def update(self):
+    def update(self, debug=False):
         for s in self.screens:
             s.update()
 
-        self.active_screen.draw()
+        self.scr.clear()
+        self.active_screen.draw(debug=debug)
         self.scr.update()
 
     def next_screen(self):

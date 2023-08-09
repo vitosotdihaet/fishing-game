@@ -17,13 +17,16 @@ class ActionKeys(IntEnum):
 
 
 class Scr:
-    def __init__(self, curses_scr):
+    def __init__(self, curses_scr, cursor_is_visible=False):
         self.curses_scr = curses_scr
 
         curses.noecho()
         curses.cbreak()
         self.curses_scr.keypad(1)
         self.curses_scr.nodelay(1)
+
+        if not cursor_is_visible:
+            curses.curs_set(0)
 
     def close(self):
         self.curses_scr.keypad(0)
@@ -49,17 +52,14 @@ if __name__ == '__main__':
         pos = [0, 0]
 
         while True:
+            STDSCR.clear(border=False)
+
             c = STDSCR.curses_scr.getch()
             m = curses.getmouse()
             s = curses.getsyx()
 
-            STDSCR.curses_scr.addstr(0, 0, ' ' * 50)
             STDSCR.curses_scr.addstr(0, 0, f'char: {c}')
-
-            STDSCR.curses_scr.addstr(1, 0, ' ' * 50)
             STDSCR.curses_scr.addstr(1, 0, f'mouse: {m}')
-
-            STDSCR.curses_scr.addstr(2, 0, ' ' * 50)
             STDSCR.curses_scr.addstr(2, 0, f'syx: {s}')
 
             match c:
@@ -68,14 +68,13 @@ if __name__ == '__main__':
                 case int(ActionKeys.RIGHT):
                     pos[0] += 1
 
-            STDSCR.curses_scr.addstr(3, 0, ' ' * 50)
             STDSCR.curses_scr.addstr(3, 0, f'pos: {pos}')
 
             STDSCR.curses_scr.move(pos[1], pos[0])
 
             curses.flushinp()
-            time.sleep(0.1)
             STDSCR.update()
+            time.sleep(0.1)
 
     except:
         curses.endwin()

@@ -37,3 +37,4 @@ from app import App
 if __name__ == '__main__':
     app = App(STDSCR, SCREENS, RODS)
     app.run()
+    # app.run(debug=True)

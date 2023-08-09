@@ -7,8 +7,13 @@ from colour import Color
 from custom_math.vec2 import vec2
 
 
+MIN_X_SPEED = 0
 MAX_X_SPEED = 4
+
+MIN_Y_SPEED = 0
 MAX_Y_SPEED = 1
+
+SPEED_CHANGE_CHANCE = 0.05
 
 
 class Fish:
@@ -28,6 +33,9 @@ class Fish:
 
         self.img = [tail, lower_body, upper_body, head]
         self.reversed_img = reverse_fish(self.img)
+
+        self.width = sum([max(map(len, p)) for p in self.img])
+        self.height = max(map(len, self.img))
 
         self.is_alive = True
 
@@ -52,14 +60,20 @@ class Fish:
     def update(self, scr, is_on_rod=False):
         rows, cols = scr.getmaxyx()
 
+        if random.random() <= SPEED_CHANGE_CHANCE:
+            self.speed.x = random.randint(max(self.speed.x - 1, -MAX_X_SPEED), min(self.speed.x + 1, MAX_X_SPEED))
+        if random.random() <= SPEED_CHANGE_CHANCE:
+            self.speed.y = random.randint(max(self.speed.y - 1, -MAX_Y_SPEED), min(self.speed.y + 1, MAX_Y_SPEED))
+
         if is_on_rod:
             temp_pos = self.pos + vec2.random()
         else:
             temp_pos = self.pos + self.speed
 
-        if temp_pos.x + 9 >= cols or temp_pos.x <= 0:
+        if cols <= temp_pos.x + self.width or temp_pos.x <= 0:
             self.speed.x *= -1
-        if temp_pos.y + 3 >= rows or temp_pos.y <= 0:
+
+        if rows <= temp_pos.y + self.height or temp_pos.y <= 0:
             self.speed.y *= -1
 
         self.prev_pos = self.pos

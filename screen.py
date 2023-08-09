@@ -5,6 +5,8 @@ from scr import Scr
 from fish import Fish
 from rod import Rod
 
+from curses import A_BOLD
+
 
 class ScreenType(Enum):
     DEFAULT = 'Hmmmm...'
@@ -15,7 +17,7 @@ class ScreenType(Enum):
 
 # A state of the game on concrete screen with all the info
 class Screen:
-    def __init__(self, screen_type: ScreenType, scr: Scr, rows: int, cols: int, rod: Rod | None, fish: list[Fish] = []):
+    def __init__(self, screen_type: ScreenType, scr: Scr, rows: int, cols: int, rod: Rod | None, fish: list[Fish] = [], title: str = ''):
         self.screen_type = screen_type
         self.scr = scr
 
@@ -24,6 +26,11 @@ class Screen:
 
         self.fish = fish
         self.rod = rod
+
+        if title != '':
+            self.title = title
+        else:
+            self.title = self.screen_type.value
 
     def update(self):
         match self.screen_type:  # handle fish behavior
@@ -35,8 +42,12 @@ class Screen:
                     f.update(self.scr.curses_scr)
 
     def draw(self, debug=False):
-        self.scr.curses_scr.clear()
-        self.scr.curses_scr.border(0)
+        if self.title != '':
+            self.scr.curses_scr.addstr(
+                0, int((self.cols - len(self.title))/2),  # center title
+                f' {self.title} ',
+                A_BOLD
+            )
 
         for f in self.fish:
             f.addstr(self.scr.curses_scr, debug=debug)
