@@ -31,7 +31,7 @@ class App:
             curses.A_BOLD
         )
 
-        throwing = False
+        rows, cols = self.scr.curses_scr.getmaxyx()
 
         while True:
             c = self.scr.curses_scr.getch()
@@ -52,16 +52,22 @@ class App:
                         curses.A_BOLD
                     )
                 case int(ActionKeys.THROW_A_ROD):
-                    if self.active_screen.rod != None:
-                        throwing = True
-                        self.active_screen.rod.throw_iteration += 1
+                    # handle throwing
+                    pass
+                case int(ActionKeys.LEFT):
+                    self.active_rod.bobber.pos.x -= 1
+                case int(ActionKeys.RIGHT):
+                    self.active_rod.bobber.pos.x += 1
+                case int(ActionKeys.UP):
+                    self.active_rod.bobber.pos.y -= 1
+                case int(ActionKeys.DOWN):
+                    self.active_rod.bobber.pos.y += 1
 
-            if not throwing and self.active_screen.rod != None:
-                self.active_screen.rod.throw_iteration = 0
-            throwing = False
-
+            curses.flushinp()
             self.update()
             time.sleep(0.1)
+
+        self.close()
 
     def update(self):
         for s in self.screens:

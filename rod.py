@@ -4,9 +4,11 @@ from bobber import Bobber
 
 from curses import A_BOLD
 
+import time
+
 
 class Rod:
-    def __init__(self, power: int, stick_img: list[str], bobber: Bobber):
+    def __init__(self, power: int, stick_img: list[str], bobber: Bobber = Bobber()):
         self.power = power
 
         self.has_fish = False
@@ -32,14 +34,12 @@ class Rod:
             scr.addstr(y, 1, f'{self.power}', A_BOLD)
             y += 1
 
-        last_y, maxx = y, x
-
         for i in range(len(self.stick_img)):
             for j in range(len(self.stick_img[i])):
                 c = self.stick_img[i][j]
-                if c != ' ':
-                    last_y = y + i
-                    scr.addstr(y + i, x + j, c)
-                maxx = max(x + j, x)
+                scr.addstr(y + i, x + j, c)
 
-        scr.addstr(last_y + self.bobber.pos.y, maxx + self.bobber.pos.x, self.bobber.img)
+        try:
+            scr.addstr(y + len(self.stick_img) - 1 + self.bobber.pos.y, x + 1 + self.bobber.pos.x, self.bobber.img)
+        except:
+            self.bobber.pos.zero()

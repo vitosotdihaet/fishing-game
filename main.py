@@ -19,7 +19,7 @@ from rod import Rod
 from bobber import Bobber
 
 RODS = [
-    Rod(1, art.rods.DEFAULT_STICK, Bobber.default())
+    Rod(1, art.rods.DEFAULT_STICK, Bobber())
 ]
 
 
