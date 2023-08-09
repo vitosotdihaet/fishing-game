@@ -33,10 +33,12 @@ class Scr:
 
     def update(self):
         self.curses_scr.refresh()
-    
-    def clear(self, border = True):
+
+    def clear(self, border=True):
         self.curses_scr.clear()
-        if border: self.curses_scr.border(0)
+        if border:
+            self.curses_scr.border(0)
+
 
 if __name__ == '__main__':
     import time

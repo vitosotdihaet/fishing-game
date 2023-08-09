@@ -4,8 +4,6 @@ from bobber import Bobber
 
 from curses import A_BOLD
 
-import time
-
 
 class Rod:
     def __init__(self, power: int, stick_img: list[str], bobber: Bobber = Bobber()):
@@ -25,7 +23,7 @@ class Rod:
     # def fish(self, fish: Fish):
     #     pass
 
-    def addstr(self, scr, x: int = 1, debug = False):
+    def addstr(self, scr, x: int = 1, debug=False):
         rows, _cols = scr.getmaxyx()
 
         y = (rows - len(self.stick_img)) // 2

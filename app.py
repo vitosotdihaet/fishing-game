@@ -22,11 +22,10 @@ class App:
 
         self.active_rod = rods[self.active_rod_ind]
 
-
     def run(self):
         title = self.active_screen.screen_type.value
         self.scr.curses_scr.addstr(
-            0, int((self.active_screen.cols - len(title))/2), # center title
+            0, int((self.active_screen.cols - len(title))/2),  # center title
             f' {title} ',
             curses.A_BOLD
         )

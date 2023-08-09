@@ -26,7 +26,7 @@ class Screen:
         self.rod = rod
 
     def update(self):
-        match self.screen_type: # handle fish behavior
+        match self.screen_type:  # handle fish behavior
             case ScreenType.FISHING:
                 for f in self.fish:
                     f.update(self.scr.curses_scr)
@@ -34,12 +34,12 @@ class Screen:
                 for f in self.fish:
                     f.update(self.scr.curses_scr)
 
-    def draw(self, debug = False):
+    def draw(self, debug=False):
         self.scr.curses_scr.clear()
         self.scr.curses_scr.border(0)
 
         for f in self.fish:
-            f.addstr(self.scr.curses_scr, debug = debug)
+            f.addstr(self.scr.curses_scr, debug=debug)
 
         if self.rod != None:
-            self.rod.addstr(self.scr.curses_scr, debug = debug)
+            self.rod.addstr(self.scr.curses_scr, debug=debug)
